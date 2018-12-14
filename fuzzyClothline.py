@@ -17,7 +17,7 @@ class Clothline:
 
 
     def addRule(self, f1, f2, of):
-        self.ruleSet.append(f1,f2,of)
+        self.ruleSet.append(self.Rule(f1,f2,of))
 
 if __name__ == '__main__':
     pass
