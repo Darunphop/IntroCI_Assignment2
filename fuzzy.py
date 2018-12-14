@@ -50,22 +50,28 @@ class fuzzy:
 
     def getCentroid(self):
         c = []
+        matter = 0.0
         for i in range(len(self.membership)-1):
-            if self.membership[i][0] < self.membership[i+1][1]:
+            if self.membership[i][0] < self.membership[i+1][0]:
                 tmp = [self.membership[i][0]+((self.membership[i+1][0]-self.membership[i][0])*(2.0/3.0)), self.membership[i+1][1]/3.0]
                 c.append(tmp)
-            elif self.membership[i][0] > self.membership[i+1][1]:
+                # matter += 0.5*(self.membership[i+1][0]-self.membership[i][0])*self.membership[i+1][1]
+            elif self.membership[i][0] > self.membership[i+1][0]:
                 tmp = [self.membership[i][0]+((self.membership[i+1][0]-self.membership[i][0])*(1.0/3.0)), self.membership[i+1][1]/3.0]
                 c.append(tmp)
+                # matter += 0.5*(self.membership[i+1][0]-self.membership[i][0])*self.membership[i][1]
             else:
                 tmp = [self.membership[i][0]+((self.membership[i+1][0]-self.membership[i][0])/2.0), self.membership[i][1]/2.0]
+                # matter += (self.membership[i+1][0]-self.membership[i][0])*self.membership[i+1][1]
 
         sum = [0,0]
         for j in c:
             sum[0] += j[0]*j[1]
             sum[1] += j[1]
+            print(j[1])
+            matter += j[1]
 
-        return sum[1]==0 and 0 or sum[0] / sum[1]
+        return sum[1]==0 and [0,0] or [sum[0] / sum[1], matter]
 
 if __name__ == '__main__':
     w = fuzzy([[400,0.0],[1000,1.0]])
@@ -74,4 +80,5 @@ if __name__ == '__main__':
     # print(d.getMemberness(599))
     print(w.getAlphaCut(0.5))
     print(d.getAlphaCut(0.5))
+    w.membership = w.getAlphaCut(0.5)
     print(w.getCentroid())
